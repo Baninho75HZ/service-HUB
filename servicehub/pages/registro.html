@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Registro de Serviços</title>
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-subtitle: #667c68;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 9px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #e6eff5;
+            color: var(--color-primary-dark);
+            transform: translateX(4px);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--color-primary);
+        }
+
+        .user-profile {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: #e6eff5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+
+        th {
+            color: var(--color-primary);
+            font-weight: 700;
+            background: #f8fafc;
+        }
+
+        .btn-novo {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-novo:hover { background: var(--color-primary-dark); }
+
+        .btn-del {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-del:hover { background: #b91c1c; }
+
+        .btn-logout {
+            background: #fdf2f2;
+            color: #b42318;
+            border: 1px solid #f8d7da;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-logout:hover { background: #f8d7da; }
+
+        .form-registro {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+            display: none;
+        }
+
+        .form-registro .input-group {
+            margin-bottom: 15px;
+        }
+
+        .form-registro label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        .form-registro input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="sidebar-brand">ServiceHub</div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Painel Principal</a></li>
+                <li><a href="clientes.html">👥 Gestão de Clientes</a></li>
+                <li><a href="orcamentos.html">📝 Orçamentos</a></li>
+                <li><a href="agenda.html">📅 Agenda</a></li>
+                <li><a href="registro.html" class="active">📋 Registro de Serviços</a></li>
+                <li><a href="financeiro.html">💰 Financeiro</a></li>
+            </ul>
+        </div>
+        <div>
+            <button id="btn-logout" class="btn-logout">Sair do Sistema</button>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Registro de Serviços</h1>
+            </div>
+            <div class="user-profile" id="user-display">Carregando...</div>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--color-primary);">Histórico de Atendimentos</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--color-subtitle);">Consulte ou adicione novos serviços executados.</p>
+                    </div>
+                    <button class="btn-novo" id="toggle-form">+ Novo Registro</button>
+                </div>
+
+                <div class="form-registro" id="box-form">
+                    <form id="form-add-registro">
+                        <div class="input-group">
+                            <label>Nome do Cliente</label>
+                            <input type="text" id="reg-cliente" placeholder="Ex: Empresa ABC" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Descrição do Serviço</label>
+                            <input type="text" id="reg-servico" placeholder="Ex: Manutenção preventiva de rede" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Valor (R$)</label>
+                            <input type="number" step="0.01" id="reg-valor" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn-novo" style="width: 100%;">Salvar Registro no Sistema</button>
+                    </form>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th style="width: 100px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-registros">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--color-subtitle);">Carregando registros...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth, db } from "../js/Firebase/firebase-config.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        const userDisplay = document.getElementById("user-display");
+        const btnToggle = document.getElementById("toggle-form");
+        const boxForm = document.getElementById("box-form");
+        const formRegistro = document.getElementById("form-add-registro");
+        const tabelaRegistros = document.getElementById("tabela-registros");
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.body.style.display = "flex";
+                currentUser = user;
+                const nome = user.displayName || user.email.split('@')[0];
+                userDisplay.textContent = `Olá, ${nome.charAt(0).toUpperCase() + nome.slice(1)}`;
+                carregarRegistros(user.uid);
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+
+        btnToggle.addEventListener("click", () => {
+            boxForm.style.display = boxForm.style.display === "block" ? "none" : "block";
+        });
+
+        formRegistro.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const cliente = document.getElementById("reg-cliente").value;
+            const descricao = document.getElementById("reg-servico").value;
+            const valor = parseFloat(document.getElementById("reg-valor").value);
+
+            try {
+                await addDoc(collection(db, "servicos"), {
+                    cliente,
+                    descricao,
+                    valor,
+                    ownerId: currentUser.uid,
+                    data: new Date()
+                });
+                alert("Serviço registrado com sucesso!");
+                formRegistro.reset();
+                boxForm.style.display = "none";
+                carregarRegistros(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao salvar serviço:", error);
+                alert("Erro ao registrar serviço: " + error.message);
+            }
+        });
+
+        // Deletar registro de serviço
+        window.deletarRegistro = async function(idDoc) {
+            if (!confirm("Deseja realmente excluir este registro de serviço?")) return;
+            try {
+                await deleteDoc(doc(db, "servicos", idDoc));
+                alert("Registro excluído com sucesso!");
+                carregarRegistros(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao excluir serviço:", error);
+                alert("Erro ao excluir registro.");
+            }
+        };
+
+        async function carregarRegistros(uid) {
+            try {
+                const q = query(collection(db, "servicos"), where("ownerId", "==", uid));
+                const querySnapshot = await getDocs(q);
+                tabelaRegistros.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    tabelaRegistros.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-subtitle);">Nenhum serviço registrado. Clique em "+ Novo Registro" acima para começar.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((documento) => {
+                    const s = documento.data();
+                    const id = documento.id;
+                    tabelaRegistros.innerHTML += `
+                        <tr>
+                            <td><strong>${s.cliente}</strong></td>
+                            <td>${s.descricao}</td>
+                            <td>R$ ${Number(s.valor || 0).toFixed(2)}</td>
+                            <td>
+                                <button class="btn-del" onclick="deletarRegistro('${id}')">🗑️ Excluir</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Erro ao carregar registros:", error);
+            }
+        }
+
+        document.getElementById("btn-logout").addEventListener("click", async () => {
+            await signOut(auth);
+            window.location.replace("../index.html");
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Orçamentos e Contratos</title>
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-subtitle: #667c68;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 9px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #e6eff5;
+            color: var(--color-primary-dark);
+            transform: translateX(4px);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--color-primary);
+        }
+
+        .user-profile {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: #e6eff5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+
+        th {
+            color: var(--color-primary);
+            font-weight: 700;
+            background: #f8fafc;
+        }
+
+        .btn-novo {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-novo:hover { background: var(--color-primary-dark); }
+
+        .btn-action {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 3px;
+        }
+        .btn-action:hover { background: #0369a1; }
+
+        .btn-contrato {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 3px;
+        }
+        .btn-contrato:hover { background: #6d28d9; }
+
+        .btn-status {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 3px;
+        }
+        .btn-status:hover { background: #15803d; }
+
+        .btn-del {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-del:hover { background: #b91c1c; }
+
+        .btn-logout {
+            background: #fdf2f2;
+            color: #b42318;
+            border: 1px solid #f8d7da;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-logout:hover { background: #f8d7da; }
+
+        .form-orcamento {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+            display: none;
+        }
+
+        .form-orcamento .input-group {
+            margin-bottom: 15px;
+        }
+
+        .form-orcamento label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        .form-orcamento input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+
+        /* Classes de Impressão Isoladas */
+        .print-area, .contrato-area { display: none; }
+
+        @media print {
+            body { display: block !important; background: white !important; }
+            aside, header, .table-container, .form-orcamento, button { display: none !important; }
+            
+            /* Controla qual área aparece com base na classe ativa */
+            body.print-orcamento-mode .print-area { display: block !important; padding: 20px; }
+            body.print-contrato-mode .contrato-area { display: block !important; padding: 20px; font-size: 12pt; color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="sidebar-brand">ServiceHub</div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Painel Principal</a></li>
+                <li><a href="clientes.html">👥 Gestão de Clientes</a></li>
+                <li><a href="orcamentos.html" class="active">📝 Orçamentos & Contratos</a></li>
+                <li><a href="agenda.html">📅 Agenda</a></li>
+                <li><a href="registro.html">📋 Registro de Serviços</a></li>
+                <li><a href="financeiro.html">💰 Financeiro</a></li>
+            </ul>
+        </div>
+        <div>
+            <button id="btn-logout" class="btn-logout">Sair do Sistema</button>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Gestão de Orçamentos e Contratos</h1>
+            </div>
+            <div class="user-profile" id="user-display">Carregando...</div>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--color-primary);">Orçamentos Emitidos</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--color-subtitle);">Gerencie orçamentos e emita contratos formais juridicamente válidos.</p>
+                    </div>
+                    <button class="btn-novo" id="toggle-form">+ Novo Orçamento</button>
+                </div>
+
+                <div class="form-orcamento" id="box-form">
+                    <form id="form-add-orcamento">
+                        <div class="input-group">
+                            <label>Nome do Cliente</label>
+                            <input type="text" id="orc-cliente" placeholder="Nome do cliente ou empresa" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Descrição do Serviço</label>
+                            <input type="text" id="orc-descricao" placeholder="Detalhes do serviço proposto" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Valor Estimado (R$)</label>
+                            <input type="number" step="0.01" id="orc-valor" placeholder="0.00" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Data e Horário Previsto</label>
+                            <input type="datetime-local" id="orc-datahora" required>
+                        </div>
+                        <button type="submit" class="btn-novo" style="width: 100%;">Salvar e Emitir Orçamento</button>
+                    </form>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th style="width: 280px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-orcamentos">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--color-subtitle);">Carregando orçamentos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Área de Impressão do Comprovante de Orçamento -->
+    <div class="print-area" id="print-area">
+        <h2 style="color: #354f63; border-bottom: 2px solid #354f63; padding-bottom: 10px;">ServiceHub - Comprovante de Orçamento</h2>
+        <p style="margin-top: 20px;"><strong>Cliente:</strong> <span id="p-cliente"></span></p>
+        <p><strong>Descrição do Serviço:</strong> <span id="p-descricao"></span></p>
+        <p><strong>Valor Estimado:</strong> <span id="p-valor"></span></p>
+        <p><strong>Status:</strong> <span id="p-status"></span></p>
+        <p style="margin-top: 40px; font-size: 12px; color: #666;">Emitido via plataforma ServiceHub em <span id="p-data"></span></p>
+    </div>
+
+    <!-- CONTRATO DE PRESTAÇÃO DE SERVIÇOS JURIDICAMENTE ROBUSTO -->
+    <div class="contrato-area" id="contrato-area">
+        <h2 style="text-align: center; font-size: 16pt; font-weight: bold; margin-bottom: 20px; text-transform: uppercase;">Contrato Particular de Prestação de Serviços Profissionais</h2>
+        
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 15px;">
+            Por este instrumento particular, de um lado <strong><span id="c-prestador">Prestador de Serviços</span></strong>, doravante denominado simplesmente <strong>CONTRATADA</strong>, e de outro lado <strong><span id="c-cliente"></span></strong>, doravante denominado <strong>CONTRATANTE</strong>, celebram o presente Contrato de Prestação de Serviços, que se regerá pelas cláusulas seguintes e pelas disposições do Código Civil Brasileiro:
+        </p>
+
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 15px;">
+            <strong>CLÁUSULA PRIMEIRA – DO OBJETO:</strong> O presente contrato tem por objeto a prestação dos serviços técnicos especializados de: <em><span id="c-descricao"></span></em>, a serem executados em conformidade com os padrões de qualidade e segurança exigidos.
+        </p>
+
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 15px;">
+            <strong>CLÁUSULA SEGUNDA – DO PRAZO E LOCAL:</strong> Os serviços serão realizados na data e horário agendados para <strong><span id="c-datahora"></span></strong>, no endereço acordado entre as partes ou nas dependências indicadas pelo CONTRATANTE.
+        </p>
+
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 15px;">
+            <strong>CLÁUSULA TERCEIRA – DO VALOR E FORMA DE PAGAMENTO:</strong> Pelos serviços ora contratados, o CONTRATANTE pagará à CONTRATADA a importância total e ajustada de <strong><span id="c-valor"></span></strong>. O pagamento deverá ser efetuado através das ferramentas integradas da plataforma ServiceHub (Pix, Boleto Bancário ou Cartão de Crédito) na data de vencimento ou conclusão do serviço.
+        </p>
+
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 15px;">
+            <strong>CLÁUSULA QUARTA – DAS RESPONSABILIDADES:</strong> A CONTRATADA compromete-se a executar os serviços com diligência e técnica adequada. O CONTRATANTE obriga-se a fornecer todas as informações e acessos necessários para a devida execução do escopo contratado.
+        </p>
+
+        <p style="text-align: justify; line-height: 1.6; margin-bottom: 30px;">
+            <strong>CLÁUSULA QUINTA – DO FORO:</strong> Fica eleito o foro da comarca de domicílio da CONTRATADA para dirimir quaisquer dúvidas ou litígios oriundos deste instrumento, renunciando a qualquer outro, por mais privilegiado que seja.
+        </p>
+
+        <p style="text-align: center; margin-bottom: 40px;">
+            E, por estarem justos e contratados, assinam o presente instrumento eletronicamente via sistema ServiceHub.
+        </p>
+
+        <div style="margin-top: 50px; display: flex; justify-content: space-between; text-align: center; font-size: 11pt;">
+            <div style="width: 45%;">
+                __________________________________________________<br>
+                <strong>CONTRATANTE</strong><br>
+                <span id="c-cliente-assinatura"></span>
+            </div>
+            <div style="width: 45%;">
+                __________________________________________________<br>
+                <strong>CONTRATADA (Prestador)</strong><br>
+                <span id="c-prestador-assinatura"></span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "../js/Firebase/firebase-config.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        const userDisplay = document.getElementById("user-display");
+        const btnToggle = document.getElementById("toggle-form");
+        const boxForm = document.getElementById("box-form");
+        const formAdd = document.getElementById("form-add-orcamento");
+        const tabelaOrcamentos = document.getElementById("tabela-orcamentos");
+        let currentUser = null;
+        let nomeEmpresaAtual = "Prestador Autônomo";
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.body.style.display = "flex";
+                currentUser = user;
+                nomeEmpresaAtual = user.displayName || user.email.split('@')[0];
+                userDisplay.textContent = `Olá, ${nomeEmpresaAtual}`;
+                carregarOrcamentos(user.uid);
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+
+        btnToggle.addEventListener("click", () => {
+            boxForm.style.display = boxForm.style.display === "block" ? "none" : "block";
+        });
+
+        formAdd.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const cliente = document.getElementById("orc-cliente").value;
+            const descricao = document.getElementById("orc-descricao").value;
+            const valor = parseFloat(document.getElementById("orc-valor").value);
+            const dataHora = document.getElementById("orc-datahora").value;
+
+            try {
+                await addDoc(collection(db, "orcamentos"), {
+                    cliente,
+                    descricao,
+                    valor,
+                    dataHora,
+                    status: "Pendente",
+                    ownerId: currentUser.uid,
+                    data: new Date()
+                });
+                alert("Orçamento criado com sucesso!");
+                formAdd.reset();
+                boxForm.style.display = "none";
+                carregarOrcamentos(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao salvar orçamento:", error);
+                alert("Erro ao salvar orçamento.");
+            }
+        });
+
+        window.aprovarEEnviar = async function(idDoc, cliente, descricao, valor, dataHora, statusAtual) {
+            if (statusAtual === "Aprovado") {
+                alert("Este orçamento já foi aprovado!");
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "orcamentos", idDoc);
+                await updateDoc(docRef, { status: "Aprovado" });
+
+                await addDoc(collection(db, "transacoes"), {
+                    orcamentoId: idDoc,
+                    cliente: cliente,
+                    descricao: descricao,
+                    tipo: "Receita",
+                    valor: Number(valor),
+                    ownerId: currentUser.uid,
+                    data: new Date()
+                });
+
+                await addDoc(collection(db, "agenda"), {
+                    orcamentoId: idDoc,
+                    cliente: cliente,
+                    dataHora: dataHora || new Date().toISOString().slice(0, 16),
+                    local: "Endereço do Cliente / A combinar",
+                    observacoes: `Compromisso gerado via Orçamento Aprovado: ${descricao} (R$ ${Number(valor).toFixed(2)})`,
+                    ownerId: currentUser.uid,
+                    criadoEm: new Date()
+                });
+
+                alert("Orçamento aprovado! Integrado ao Financeiro e Agenda.");
+                carregarOrcamentos(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao aprovar:", error);
+                alert("Erro ao aprovar orçamento.");
+            }
+        };
+
+        window.deletarOrcamento = async function(idDoc) {
+            if (!confirm("Deseja excluir este orçamento? Os registros no Financeiro e Agenda serão limpos.")) return;
+
+            try {
+                await deleteDoc(doc(db, "orcamentos", idDoc));
+
+                const qTrans = query(collection(db, "transacoes"), where("orcamentoId", "==", idDoc), where("ownerId", "==", currentUser.uid));
+                const snapTrans = await getDocs(qTrans);
+                snapTrans.forEach(async (tDoc) => { await deleteDoc(doc(db, "transacoes", tDoc.id)); });
+
+                const qAgenda = query(collection(db, "agenda"), where("orcamentoId", "==", idDoc), where("ownerId", "==", currentUser.uid));
+                const snapAgenda = await getDocs(qAgenda);
+                snapAgenda.forEach(async (aDoc) => { await deleteDoc(doc(db, "agenda", aDoc.id)); });
+
+                alert("Excluído com sucesso!");
+                carregarOrcamentos(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao deletar:", error);
+            }
+        };
+
+        window.gerarPDF = function(cliente, descricao, valor, status) {
+            document.getElementById("p-cliente").textContent = cliente;
+            document.getElementById("p-descricao").textContent = descricao;
+            document.getElementById("p-valor").textContent = `R$ ${Number(valor).toFixed(2)}`;
+            document.getElementById("p-status").textContent = status;
+            document.getElementById("p-data").textContent = new Date().toLocaleDateString('pt-BR');
+            
+            document.body.className = "print-orcamento-mode";
+            window.print();
+            document.body.className = "";
+        };
+
+        // Geração do Contrato Jurídico Isolado para Impressão
+        window.gerarContratoPDF = function(cliente, descricao, valor, dataHora) {
+            document.getElementById("c-prestador").textContent = nomeEmpresaAtual;
+            document.getElementById("c-prestador-assinatura").textContent = nomeEmpresaAtual;
+            document.getElementById("c-cliente").textContent = cliente;
+            document.getElementById("c-cliente-assinatura").textContent = cliente;
+            document.getElementById("c-descricao").textContent = descricao;
+            document.getElementById("c-valor").textContent = `R$ ${Number(valor).toFixed(2)}`;
+            
+            let dataFormatada = "A combinar";
+            if (dataHora && dataHora.includes('T')) {
+                const partes = dataHora.split('T');
+                const dPartes = partes[0].split('-');
+                if (dPartes.length === 3) {
+                    dataFormatada = `${dPartes[2]}/${dPartes[1]}/${dPartes[0]} às ${partes[1]}`;
+                }
+            }
+            document.getElementById("c-datahora").textContent = dataFormatada;
+            
+            document.body.className = "print-contrato-mode";
+            window.print();
+            document.body.className = "";
+        };
+
+        async function carregarOrcamentos(uid) {
+            try {
+                const q = query(collection(db, "orcamentos"), where("ownerId", "==", uid));
+                const querySnapshot = await getDocs(q);
+                tabelaOrcamentos.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    tabelaOrcamentos.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--color-subtitle);">Nenhum orçamento cadastrado.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((documento) => {
+                    const o = documento.data();
+                    const id = documento.id;
+                    const corStatus = o.status === "Aprovado" ? "color: #16a34a; font-weight: 600;" : "color: #b45309; font-weight: 600;";
+                    const textoBotaoStatus = o.status === "Pendente" ? "Aprovar" : "Aprovado";
+                    const desativarBotao = o.status === "Aprovado" ? "disabled style='background: #94a3b8; cursor: not-allowed;'" : "";
+                    const dataHoraOrcamento = o.dataHora || "";
+
+                    const botaoContrato = o.status === "Aprovado" 
+                        ? `<button class="btn-contrato" onclick="gerarContratoPDF('${o.cliente}', '${o.descricao}', ${o.valor}, '${dataHoraOrcamento}')">📜 Contrato</button>` 
+                        : '';
+
+                    tabelaOrcamentos.innerHTML += `
+                        <tr>
+                            <td><strong>${o.cliente}</strong></td>
+                            <td>${o.descricao}</td>
+                            <td>R$ ${Number(o.valor).toFixed(2)}</td>
+                            <td><span style="${corStatus}">${o.status}</span></td>
+                            <td>
+                                <button class="btn-action" onclick="gerarPDF('${o.cliente}', '${o.descricao}', ${o.valor}, '${o.status}')">📄 PDF</button>
+                                ${botaoContrato}
+                                <button class="btn-status" ${desativarBotao} onclick="aprovarEEnviar('${id}', '${o.cliente}', '${o.descricao}', ${o.valor}, '${dataHoraOrcamento}', '${o.status}')">${textoBotaoStatus}</button>
+                                <button class="btn-del" onclick="deletarOrcamento('${id}')">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Erro ao carregar:", error);
+            }
+        }
+
+        document.getElementById("btn-logout").addEventListener("click", async () => {
+            await signOut(auth);
+            window.location.replace("../index.html");
+        });
+    </script>
+</body>
+</html>

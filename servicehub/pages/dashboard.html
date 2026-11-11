@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Painel Principal</title>
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- Importação do Chart.js para os gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-subtitle: #667c68;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 9px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #e6eff5;
+            color: var(--color-primary-dark);
+            transform: translateX(4px);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--color-primary);
+        }
+
+        .user-profile {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: #e6eff5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-stat {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        .card-stat h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: var(--color-subtitle);
+        }
+
+        .card-stat .value {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        .chart-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: var(--color-primary);
+        }
+
+        .btn-logout {
+            background: #fdf2f2;
+            color: #b42318;
+            border: 1px solid #f8d7da;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-logout:hover { background: #f8d7da; }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="sidebar-brand">ServiceHub</div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html" class="active">📊 Painel Principal</a></li>
+                <li><a href="clientes.html">👥 Gestão de Clientes</a></li>
+                <li><a href="orcamentos.html">📝 Orçamentos</a></li>
+                <li><a href="agenda.html">📅 Agenda</a></li>
+                <li><a href="registro.html">📋 Registro de Serviços</a></li>
+                <li><a href="financeiro.html">💰 Financeiro</a></li>
+            </ul>
+        </div>
+        <div>
+            <button id="btn-logout" class="btn-logout">Sair do Sistema</button>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Painel de Controle</h1>
+            </div>
+            <div class="user-profile" id="user-display">Carregando...</div>
+        </header>
+
+        <div class="content-body">
+            <div class="cards-grid">
+                <div class="card-stat">
+                    <h3>Clientes Cadastrados</h3>
+                    <p class="value" id="total-clientes">0</p>
+                </div>
+                <div class="card-stat">
+                    <h3>Serviços Realizados</h3>
+                    <p class="value" id="total-servicos">0</p>
+                </div>
+                <div class="card-stat">
+                    <h3>Faturamento Total</h3>
+                    <p class="value" id="total-faturamento">R$ 0,00</p>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Evolução de Receitas (Faturamento)</h3>
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="graficoFaturamento"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <h3>Status dos Orçamentos</h3>
+                    <div style="position: relative; height: 260px; display: flex; justify-content: center; align-items: center;">
+                        <canvas id="graficoOrcamentos"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);">
+                <h3 style="margin-top: 0; color: var(--color-primary);">Ambiente Integrado ServiceHub</h3>
+                <p style="color: var(--color-subtitle); font-size: 14px; line-height: 1.6; margin: 0;">
+                    Plataforma autônoma sincronizada via Firebase Firestore com Open Finance e emissão de cobranças automáticas (Pix, Boleto e Cartão).
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth, db } from "../js/Firebase/firebase-config.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        const userDisplay = document.getElementById("user-display");
+        const btnLogout = document.getElementById("btn-logout");
+        const elTotalClientes = document.getElementById("total-clientes");
+        const elTotalServicos = document.getElementById("total-servicos");
+        const elTotalFaturamento = document.getElementById("total-faturamento");
+
+        let chartFatInstance = null;
+        let chartOrcInstance = null;
+
+        async function popularDadosIniciais(uid) {
+            try {
+                const qCli = query(collection(db, "clientes"), where("ownerId", "==", uid));
+                const snapCli = await getDocs(qCli);
+
+                if (snapCli.empty) {
+                    const clientesFicticios = [
+                        { nome: "Oficina Mecânica Silva", email: "contato@silva.com", telefone: "(75) 98811-2233", ownerId: uid },
+                        { nome: "Supermercado Boa Praça", email: "gerencia@boapraca.com", telefone: "(75) 99123-4455", ownerId: uid },
+                        { nome: "Clínica OdontoSorriso", email: "contato@sorriso.com", telefone: "(75) 98765-1122", ownerId: uid }
+                    ];
+                    for (let c of clientesFicticios) { await addDoc(collection(db, "clientes"), c); }
+
+                    const orcamentosFicticios = [
+                        { cliente: "Oficina Mecânica Silva", descricao: "Manutenção elétrica", valor: 450.00, status: "Aprovado", ownerId: uid },
+                        { cliente: "Supermercado Boa Praça", descricao: "Instalação de câmeras", valor: 1200.00, status: "Pendente", ownerId: uid },
+                        { cliente: "Clínica OdontoSorriso", descricao: "Reparo hidráulico", valor: 350.00, status: "Aprovado", ownerId: uid }
+                    ];
+                    for (let o of orcamentosFicticios) {
+                        const docRef = await addDoc(collection(db, "orcamentos"), o);
+                        if (o.status === "Aprovado") {
+                            await addDoc(collection(db, "transacoes"), {
+                                orcamentoId: docRef.id,
+                                cliente: o.cliente,
+                                descricao: o.descricao,
+                                tipo: "Receita",
+                                valor: o.valor,
+                                ownerId: uid,
+                                data: new Date()
+                            });
+                        }
+                    }
+
+                    const servicosFicticios = [
+                        { cliente: "Oficina Mecânica Silva", descricao: "Revisão geral", valor: 450.00, ownerId: uid },
+                        { cliente: "Clínica OdontoSorriso", descricao: "Troca de conexões", valor: 350.00, ownerId: uid }
+                    ];
+                    for (let s of servicosFicticios) { await addDoc(collection(db, "servicos"), s); }
+
+                    window.location.reload();
+                }
+            } catch (e) {
+                console.error("Erro ao popular dados:", e);
+            }
+        }
+
+        async function carregarDashboard(uid) {
+            try {
+                const snapClientes = await getDocs(query(collection(db, "clientes"), where("ownerId", "==", uid)));
+                elTotalClientes.textContent = snapClientes.size;
+
+                const snapServicos = await getDocs(query(collection(db, "servicos"), where("ownerId", "==", uid)));
+                elTotalServicos.textContent = snapServicos.size;
+
+                const snapTrans = await getDocs(query(collection(db, "transacoes"), where("ownerId", "==", uid)));
+                let faturamentoTotal = 0;
+
+                snapTrans.forEach((doc) => {
+                    const t = doc.data();
+                    if (t.tipo === "Receita" && t.valor) {
+                        faturamentoTotal += Number(t.valor);
+                    }
+                });
+                elTotalFaturamento.textContent = faturamentoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                const snapOrc = await getDocs(query(collection(db, "orcamentos"), where("ownerId", "==", uid)));
+                let aprovados = 0;
+                let pendentes = 0;
+                snapOrc.forEach((doc) => {
+                    const o = doc.data();
+                    if (o.status === "Aprovado") aprovados++;
+                    else pendentes++;
+                });
+
+                const ctxFat = document.getElementById('graficoFaturamento').getContext('2d');
+                if (chartFatInstance) chartFatInstance.destroy();
+                chartFatInstance = new Chart(ctxFat, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Atual', 'Jul'],
+                        datasets: [{
+                            label: 'Receitas (R$)',
+                            data: [0, 0, 0, 0, 0, faturamentoTotal, 0],
+                            backgroundColor: '#354f63',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                const ctxOrc = document.getElementById('graficoOrcamentos').getContext('2d');
+                if (chartOrcInstance) chartOrcInstance.destroy();
+                chartOrcInstance = new Chart(ctxOrc, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Aprovados', 'Pendentes'],
+                        datasets: [{
+                            data: [aprovados || 1, pendentes || 0],
+                            backgroundColor: ['#16a34a', '#b45309']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+
+            } catch (e) {
+                console.error("Erro ao carregar gráficos:", e);
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.body.style.display = "flex";
+                
+                // PRIORIZA O NOME DA EMPRESA CADASTRADO NO FIREBASE AUTH (displayName)
+                const nomeEmpresa = user.displayName || user.email.split('@')[0];
+                userDisplay.textContent = `Olá, ${nomeEmpresa}`;
+
+                await popularDadosIniciais(user.uid);
+                await carregarDashboard(user.uid);
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+
+        if (btnLogout) {
+            btnLogout.addEventListener("click", async () => {
+                await signOut(auth);
+                window.location.replace("../index.html");
+            });
+        }
+    </script>
+</body>
+</html>

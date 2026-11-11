@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Gestão de Clientes</title>
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-subtitle: #667c68;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 9px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #e6eff5;
+            color: var(--color-primary-dark);
+            transform: translateX(4px);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--color-primary);
+        }
+
+        .user-profile {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: #e6eff5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+
+        th {
+            color: var(--color-primary);
+            font-weight: 700;
+            background: #f8fafc;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .btn-novo {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-novo:hover { background: var(--color-primary-dark); }
+
+        .btn-del {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-del:hover { background: #b91c1c; }
+
+        .btn-logout {
+            background: #fdf2f2;
+            color: #b42318;
+            border: 1px solid #f8d7da;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-logout:hover { background: #f8d7da; }
+
+        .form-cliente {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+            display: none;
+        }
+
+        .form-cliente .input-group {
+            margin-bottom: 15px;
+        }
+
+        .form-cliente label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        .form-cliente input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="sidebar-brand">ServiceHub</div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Painel Principal</a></li>
+                <li><a href="clientes.html" class="active">👥 Gestão de Clientes</a></li>
+                <li><a href="orcamentos.html">📝 Orçamentos</a></li>
+                <li><a href="agenda.html">📅 Agenda</a></li>
+                <li><a href="registro.html">📋 Registro de Serviços</a></li>
+                <li><a href="financeiro.html">💰 Financeiro</a></li>
+            </ul>
+        </div>
+        <div>
+            <button id="btn-logout" class="btn-logout">Sair do Sistema</button>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Gestão de Clientes</h1>
+            </div>
+            <div class="user-profile" id="user-display">Carregando...</div>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--color-primary);">Base de Clientes Ativos</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--color-subtitle);">Gerencie os contatos cadastrados para emissão rápida de ordens e orçamentos.</p>
+                    </div>
+                    <button class="btn-novo" id="toggle-form">+ Novo Cliente</button>
+                </div>
+
+                <div class="form-cliente" id="box-form">
+                    <form id="form-add-cliente">
+                        <div class="input-group">
+                            <label>Nome / Empresa</label>
+                            <input type="text" id="nome-cliente" placeholder="Ex: Oficina Mecânica Central" required>
+                        </div>
+                        <div class="input-group">
+                            <label>E-mail de Contato</label>
+                            <input type="email" id="email-cliente" placeholder="contato@empresa.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Telefone / WhatsApp</label>
+                            <input type="text" id="tel-cliente" placeholder="(75) 99888-7766" required>
+                        </div>
+                        <button type="submit" class="btn-novo" style="width: 100%;">Cadastrar Cliente no Sistema</button>
+                    </form>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome / Empresa</th>
+                            <th>E-mail</th>
+                            <th>Telefone / WhatsApp</th>
+                            <th style="width: 100px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-clientes">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--color-subtitle);">Carregando clientes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { auth, db } from "../js/Firebase/firebase-config.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        const userDisplay = document.getElementById("user-display");
+        const btnToggle = document.getElementById("toggle-form");
+        const boxForm = document.getElementById("box-form");
+        const formAdd = document.getElementById("form-add-cliente");
+        const tabelaClientes = document.getElementById("tabela-clientes");
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.body.style.display = "flex";
+                currentUser = user;
+                const nome = user.displayName || user.email.split('@')[0];
+                userDisplay.textContent = `Olá, ${nome.charAt(0).toUpperCase() + nome.slice(1)}`;
+                carregarClientes(user.uid);
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+
+        btnToggle.addEventListener("click", () => {
+            boxForm.style.display = boxForm.style.display === "block" ? "none" : "block";
+        });
+
+        formAdd.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const nome = document.getElementById("nome-cliente").value;
+            const email = document.getElementById("email-cliente").value;
+            const telefone = document.getElementById("tel-cliente").value;
+
+            try {
+                await addDoc(collection(db, "clientes"), {
+                    nome,
+                    email,
+                    telefone,
+                    ownerId: currentUser.uid,
+                    data: new Date()
+                });
+                alert("Cliente cadastrado com sucesso!");
+                formAdd.reset();
+                boxForm.style.display = "none";
+                carregarClientes(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao salvar cliente:", error);
+                alert("Erro ao salvar cliente: " + error.message);
+            }
+        });
+
+        // Função para apagar cliente com confirmação
+        window.deletarCliente = async function(idDoc) {
+            if (!confirm("Tem certeza que deseja excluir este cliente do sistema?")) return;
+            try {
+                await deleteDoc(doc(db, "clientes", idDoc));
+                alert("Cliente excluído com sucesso!");
+                carregarClientes(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao excluir cliente:", error);
+                alert("Erro ao excluir cliente.");
+            }
+        };
+
+        async function carregarClientes(uid) {
+            try {
+                const q = query(collection(db, "clientes"), where("ownerId", "==", uid));
+                const querySnapshot = await getDocs(q);
+                tabelaClientes.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    tabelaClientes.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-subtitle);">Nenhum cliente cadastrado. Clique em "+ Novo Cliente" acima para começar.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((documento) => {
+                    const c = documento.data();
+                    const id = documento.id;
+                    tabelaClientes.innerHTML += `
+                        <tr>
+                            <td><strong>${c.nome}</strong></td>
+                            <td>${c.email}</td>
+                            <td>${c.telefone}</td>
+                            <td>
+                                <button class="btn-del" onclick="deletarCliente('${id}')">🗑️ Excluir</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Erro ao carregar:", error);
+            }
+        }
+
+        document.getElementById("btn-logout").addEventListener("click", async () => {
+            await signOut(auth);
+            window.location.replace("../index.html");
+        });
+    </script>
+</body>
+</html>

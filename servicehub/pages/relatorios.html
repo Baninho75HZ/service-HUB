@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - ServiceHub</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/relatorios.css">
+</head>
+<body>
+
+    <div class="layout-app">
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">ServiceHub</div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html">Início</a></li>
+                <li class="nav-item"><a href="clientes.html">Clientes</a></li>
+                <li class="nav-item"><a href="orcamentos.html">Orçamentos</a></li>
+                <li class="nav-item"><a href="servicos.html">Serviços</a></li>
+                <li class="nav-item"><a href="agenda.html">Agenda</a></li>
+                <li class="nav-item"><a href="financeiro.html">Financeiro</a></li>
+                <li class="nav-item"><a href="relatorios.html" class="active">Relatórios</a></li>
+            </ul>
+            
+            <div class="sidebar-spacer"></div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="configuracoes.html">Configurações</a></li>
+                <li class="nav-item"><a href="login.html" style="color: #C94C4C;">Sair</a></li>
+            </ul>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content" style="flex-grow: 1; padding: 32px; overflow-y: auto;">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div>
+                    <h1 style="color: var(--cor-texto-principal); font-size: 1.75rem;">Relatórios Gerenciais</h1>
+                    <p style="color: var(--cor-texto-secundario); margin-top: 8px;">Visão geral do seu desempenho e faturamento no mês.</p>
+                </div>
+                <!-- Filtro simples de período -->
+                <div>
+                    <select class="form-input" style="padding: 8px 16px;">
+                        <option>Agosto / 2026</option>
+                        <option>Julho / 2026</option>
+                        <option>Junho / 2026</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- RESUMO EM DESTAQUE -->
+            <section class="relatorio-grid">
+                
+                <!-- Card de Faturamento Total -->
+                <div class="card">
+                    <span class="kpi-title" style="color: var(--cor-texto-secundario);">Total Faturado no Mês</span>
+                    <h2 style="font-size: 2.25rem; font-weight: 700; color: var(--cor-sucesso); margin-top: 8px;">R$ 4.500,00</h2>
+                    <p style="font-size: 0.875rem; color: var(--cor-texto-secundario); margin-top: 8px;">📈 15% a mais que o mês anterior</p>
+                </div>
+
+                <!-- Card de Lucro Líquido -->
+                <div class="card relatorio-card-destaque">
+                    <span class="kpi-title" style="color: var(--cor-destaque);">Seu Lucro Real (Guardado)</span>
+                    <h2 style="font-size: 2.25rem; font-weight: 700; color: #FFFFFF; margin-top: 8px;">R$ 3.250,00</h2>
+                    <p style="font-size: 0.875rem; color: var(--cor-destaque); margin-top: 8px;">💡 Descontando materiais e custos gerais</p>
+                </div>
+
+            </section>
+
+            <!-- PAINÉIS DE DETALHES -->
+            <section class="relatorio-grid">
+                
+                <!-- Serviços mais realizados -->
+                <div class="card">
+                    <h2 class="panel-header" style="font-size: 1.125rem; color: var(--cor-principal); margin-bottom: 20px;">Serviços Mais Realizados</h2>
+                    
+                    <div class="relatorio-lista-simples">
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">Instalação e Manutenção Elétrica</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">6 serviços executados</p>
+                            </div>
+                            <span class="status-tag" style="background-color: var(--cor-destaque); color: var(--cor-texto-principal);">50% do total</span>
+                        </div>
+
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">Pintura de Fachada / Paredes</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">3 serviços executados</p>
+                            </div>
+                            <span class="status-tag" style="background-color: var(--cor-destaque); color: var(--cor-texto-principal);">30% do total</span>
+                        </div>
+
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">Reparos Hidráulicos</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">2 serviços executados</p>
+                            </div>
+                            <span class="status-tag" style="background-color: var(--cor-destaque); color: var(--cor-texto-principal);">20% do total</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clientes que mais geraram receita -->
+                <div class="card">
+                    <h2 class="panel-header" style="font-size: 1.125rem; color: var(--cor-principal); margin-bottom: 20px;">Principais Clientes do Mês</h2>
+                    
+                    <div class="relatorio-lista-simples">
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">Carlos Souza</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">2 projetos fechados</p>
+                            </div>
+                            <span style="font-weight: 700; color: var(--cor-sucesso);">R$ 1.800,00</span>
+                        </div>
+
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">Ana Lúcia</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">1 projeto fechado</p>
+                            </div>
+                            <span style="font-weight: 700; color: var(--cor-sucesso);">R$ 1.200,00</span>
+                        </div>
+
+                        <div class="relatorio-linha-item">
+                            <div>
+                                <strong style="color: var(--cor-texto-principal);">João da Silva</strong>
+                                <p style="font-size: 0.875rem; color: var(--cor-texto-secundario);">3 chamados avulsos</p>
+                            </div>
+                            <span style="font-weight: 700; color: var(--cor-sucesso);">R$ 450,00</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

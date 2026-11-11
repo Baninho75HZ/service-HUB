@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Login / Cadastro</title>
+    
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/global.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .auth-container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 14px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 10px 30px rgba(35, 65, 85, 0.08);
+            width: 380px;
+            box-sizing: border-box;
+        }
+
+        .auth-brand {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 13px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+
+        .btn-submit {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 15px;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .toggle-auth {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .toggle-auth a {
+            color: var(--color-primary);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .toggle-auth a:hover {
+            text-decoration: underline;
+        }
+
+        .campo-registro {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-brand">ServiceHub</div>
+        <p class="auth-subtitle" id="auth-subtitle">Faça login para acessar sua conta</p>
+
+        <form id="auth-form">
+            <!-- Campo de Nome (Apenas visível no Registro) -->
+            <div class="input-group campo-registro" id="group-nome">
+                <label>Seu Nome / Nome da Empresa</label>
+                <input type="text" id="usuario-nome" placeholder="Ex: Guviloped">
+            </div>
+
+            <div class="input-group">
+                <label>E-mail</label>
+                <input type="email" id="usuario-email" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="input-group">
+                <label>Senha</label>
+                <input type="password" id="usuario-senha" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-action-text">Entrar no Sistema</button>
+        </form>
+
+        <div class="toggle-auth">
+            <span id="toggle-text">Não tem uma conta?</span> 
+            <a id="btn-toggle-mode">Criar conta agora</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth } from "./js/Firebase/firebase-config.js";
+        import { 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            updateProfile,
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+        const authForm = document.getElementById("auth-form");
+        const authSubtitle = document.getElementById("auth-subtitle");
+        const btnActionText = document.getElementById("btn-action-text");
+        const toggleText = document.getElementById("toggle-text");
+        const btnToggleMode = document.getElementById("btn-toggle-mode");
+        const groupNome = document.getElementById("group-nome");
+        const inputNome = document.getElementById("usuario-nome");
+
+        let isRegisterMode = false;
+
+        // Se o usuário já estiver logado, redireciona direto para o painel
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.replace("pages/dashboard.html");
+            }
+        });
+
+        // Alternar entre modo Login e modo Registro
+        btnToggleMode.addEventListener("click", () => {
+            isRegisterMode = !isRegisterMode;
+            if (isRegisterMode) {
+                authSubtitle.textContent = "Crie sua conta para começar";
+                btnActionText.textContent = "Cadastrar Conta";
+                toggleText.textContent = "Já tem uma conta?";
+                btnToggleMode.textContent = "Fazer login";
+                groupNome.style.display = "block";
+                inputNome.setAttribute("required", "true");
+            } else {
+                authSubtitle.textContent = "Faça login para acessar sua conta";
+                btnActionText.textContent = "Entrar no Sistema";
+                toggleText.textContent = "Não tem uma conta?";
+                btnToggleMode.textContent = "Criar conta agora";
+                groupNome.style.display = "none";
+                inputNome.removeAttribute("required");
+            }
+        });
+
+        // Ação de Login ou Cadastro
+        authForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("usuario-email").value;
+            const senha = document.getElementById("usuario-senha").value;
+
+            try {
+                if (isRegisterMode) {
+                    const nome = inputNome.value;
+                    // 1. Cria o usuário no Firebase Auth
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+                    
+                    // 2. Atualiza o perfil do usuário salvando o nome dele
+                    await updateProfile(userCredential.user, {
+                        displayName: nome
+                    });
+
+                    alert("Conta criada com sucesso!");
+                    window.location.replace("pages/dashboard.html");
+                } else {
+                    // Faz o login normal
+                    await signInWithEmailAndPassword(auth, email, senha);
+                    window.location.replace("pages/dashboard.html");
+                }
+            } catch (error) {
+                console.error("Erro na autenticação:", error);
+                alert("Erro: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

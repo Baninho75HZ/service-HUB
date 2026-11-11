@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Orçamento - ServiceHub</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+</head>
+<body>
+
+    <div class="layout-app">
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">ServiceHub</div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html">Início</a></li>
+                <li class="nav-item"><a href="clientes.html">Clientes</a></li>
+                <!-- Marcamos Orçamentos como Ativo -->
+                <li class="nav-item"><a href="orcamentos.html" class="active">Orçamentos</a></li>
+                <li class="nav-item"><a href="servicos.html">Serviços</a></li>
+                <li class="nav-item"><a href="agenda.html">Agenda</a></li>
+                <li class="nav-item"><a href="financeiro.html">Financeiro</a></li>
+                <li class="nav-item"><a href="relatorios.html">Relatórios</a></li>
+            </ul>
+            
+            <div class="sidebar-spacer"></div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="configuracoes.html">Configurações</a></li>
+                <li class="nav-item"><a href="login.html" style="color: #C94C4C;">Sair</a></li>
+            </ul>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content" style="flex-grow: 1; padding: 32px; overflow-y: auto;">
+            
+            <header class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div>
+                    <h1 style="color: var(--cor-texto-principal); font-size: 1.75rem;">Novo Orçamento</h1>
+                    <p style="color: var(--cor-texto-secundario); margin-top: 8px;">Preencha os dados abaixo para enviar ao cliente.</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-outline">Voltar</a>
+            </header>
+
+            <!-- FORMULÁRIO DE ORÇAMENTO -->
+            <section class="card" style="max-width: 800px;">
+                <form action="orcamentos.html" method="GET">
+                    
+                    <!-- Dados do Cliente -->
+                    <h2 class="panel-header" style="font-size: 1.1rem; color: var(--cor-principal); margin-bottom: 16px;">1. Dados do Cliente</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cliente" class="form-label">Nome do Cliente *</label>
+                            <!-- Idealmente isso seria um select puxando dos clientes cadastrados, mas para o MVP um input + datalist funciona bem -->
+                            <input type="text" id="cliente" class="form-input" placeholder="Ex: João da Silva" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone" class="form-label">WhatsApp do Cliente *</label>
+                            <input type="tel" id="telefone" class="form-input" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+
+                    <!-- Dados do Serviço -->
+                    <h2 class="panel-header" style="font-size: 1.1rem; color: var(--cor-principal); margin-top: 24px; margin-bottom: 16px;">2. Detalhes do Serviço</h2>
+                    <div class="form-group">
+                        <label for="descricao" class="form-label">O que precisa ser feito? *</label>
+                        <textarea id="descricao" class="form-input" placeholder="Descreva o serviço em detalhes (ex: Troca de fiação do chuveiro e instalação de disjuntor)" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="data_prevista" class="form-label">Data Prevista para o Serviço</label>
+                            <input type="date" id="data_prevista" class="form-input">
+                        </div>
+                    </div>
+
+                    <!-- Valores -->
+                    <h2 class="panel-header" style="font-size: 1.1rem; color: var(--cor-principal); margin-top: 24px; margin-bottom: 16px;">3. Valores</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valor_material" class="form-label">Custo com Materiais (R$)</label>
+                            <input type="number" id="valor_material" class="form-input" placeholder="0,00" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="valor_mao_obra" class="form-label">Valor da Mão de Obra (R$) *</label>
+                            <input type="number" id="valor_mao_obra" class="form-input" placeholder="0,00" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <!-- Ações -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="window.history.back()">Cancelar</button>
+                        <!-- Ação positiva usando o Verde Musgo conforme a regra de cores -->
+                        <button type="submit" class="btn btn-success">Salvar e Gerar Orçamento</button>
+                    </div>
+
+                </form>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>

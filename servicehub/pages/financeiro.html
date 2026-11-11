@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Controle Financeiro</title>
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e6eff5, #f8fafc);
+            --color-primary: #354f63;
+            --color-primary-dark: #263c4e;
+            --color-subtitle: #667c68;
+            --color-text: #334155;
+            --color-border: #cbd5dc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--color-text);
+            display: none;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 260px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--color-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            border-radius: 9px;
+            transition: background 0.2s ease;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: #e6eff5;
+            color: var(--color-primary-dark);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 22px;
+            color: var(--color-primary);
+        }
+
+        .user-profile {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: #e6eff5;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .content-body {
+            padding: 30px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 15px rgba(35, 65, 85, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 14px;
+        }
+
+        th {
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .btn-novo {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-novo:hover { background: var(--color-primary-dark); }
+
+        .btn-pagar {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+        .btn-pagar:hover { background: #6d28d9; }
+
+        .btn-del {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-del:hover { background: #b91c1c; }
+
+        .btn-logout {
+            background: #fdf2f2;
+            color: #b42318;
+            border: 1px solid #f8d7da;
+            padding: 12px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-transacao {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid var(--color-border);
+            display: none;
+        }
+
+        .form-transacao .input-group {
+            margin-bottom: 15px;
+        }
+
+        .form-transacao label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        .form-transacao input, .form-transacao select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #ffffff;
+        }
+
+        /* Modal de Pagamento e Integração Bancária */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 460px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: left;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--color-primary);
+            text-align: center;
+        }
+        .modal-content p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .banco-box {
+            background: #f8fafc;
+            border: 1px solid var(--color-border);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .pag-options {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .btn-metodo {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--color-border);
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .btn-metodo.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        .detalhe-pagamento {
+            background: #fdf2f2;
+            border: 1px solid #f8d7da;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        .btn-fechar {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="sidebar-brand">ServiceHub</div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Painel Principal</a></li>
+                <li><a href="clientes.html">👥 Gestão de Clientes</a></li>
+                <li><a href="orcamentos.html">📝 Orçamentos</a></li>
+                <li><a href="agenda.html">📅 Agenda</a></li>
+                <li><a href="registro.html">📋 Registro de Serviços</a></li>
+                <li><a href="financeiro.html" class="active">💰 Financeiro</a></li>
+            </ul>
+        </div>
+        <div>
+            <button id="btn-logout" class="btn-logout">Sair do Sistema</button>
+        </div>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-title">
+                <h1>Controle Financeiro</h1>
+            </div>
+            <div class="user-profile" id="user-display">Carregando...</div>
+        </header>
+
+        <div class="content-body">
+            <div class="table-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin: 0; color: var(--color-primary);">Histórico de Transações</h3>
+                    <button class="btn-novo" id="toggle-form">+ Nova Transação Manual</button>
+                </div>
+
+                <div class="form-transacao" id="box-form">
+                    <form id="form-add-transacao">
+                        <div class="input-group">
+                            <label>Descrição</label>
+                            <input type="text" id="fin-desc" placeholder="Ex: Compra de material" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Tipo</label>
+                            <select id="fin-tipo" required>
+                                <option value="Receita">Receita (Entrada)</option>
+                                <option value="Despesa">Despesa (Saída)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Valor (R$)</label>
+                            <input type="number" step="0.01" id="fin-valor" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn-novo" style="width: 100%;">Salvar Transação</button>
+                    </form>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cliente / Descrição</th>
+                            <th>Tipo</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-transacoes">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--color-subtitle);">Carregando transações...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Pagamento e Integração Bancária -->
+    <div class="modal-overlay" id="modal-pagamento">
+        <div class="modal-content">
+            <h3>Detalhes e Pagamento</h3>
+            <p><strong>Cliente:</strong> <span id="m-cliente"></span></p>
+            <p><strong>Descrição:</strong> <span id="m-descricao"></span></p>
+            <p><strong>Valor:</strong> <span id="m-valor" style="color: #16a34a; font-weight: bold;"></span></p>
+            
+            <div class="banco-box">
+                <p style="margin: 0 0 4px 0; font-size: 13px; font-weight: bold; color: var(--color-primary);">🏦 Banco Vinculado (Open Finance)</p>
+                <p style="margin: 0; font-size: 12px; color: #475569;">Conta PJ Autônomo • Status: <span style="color: #16a34a; font-weight: bold;">Sincronizado ✅</span></p>
+            </div>
+
+            <p style="font-size: 13px; font-weight: bold; margin-bottom: 5px;">Escolha a Forma de Pagamento:</p>
+            <div class="pag-options">
+                <button class="btn-metodo active" onclick="selecionarMetodo('pix')">Pix</button>
+                <button class="btn-metodo" onclick="selecionarMetodo('boleto')">Boleto</button>
+                <button class="btn-metodo" onclick="selecionarMetodo('cartao')">Cartão</button>
+            </div>
+
+            <div id="info-pix" class="detalhe-pagamento" style="display: block; background: #f0fdf4; border-color: #bbf7d0;">
+                <p style="margin:0 0 5px 0; font-weight:bold; color: #166534;">📱 Pix Copia e Cola:</p>
+                <div style="font-family:monospace; font-size:11px; background:#fff; padding:6px; border:1px solid #d1fae5; word-break:break-all;">00020126580014br.gov.bcb.pix0136servicehub-pay-uuid</div>
+            </div>
+
+            <div id="info-boleto" class="detalhe-pagamento">
+                <p style="margin:0 0 5px 0; font-weight:bold; color: #991b1b;">📄 Boleto Bancário:</p>
+                <p style="margin:0; font-size:12px;">Linha digitável: 34191.79001 01043.510047 91020.600004 5 91420000030000</p>
+            </div>
+
+            <div id="info-cartao" class="detalhe-pagamento">
+                <p style="margin:0 0 5px 0; font-weight:bold; color: #1e40af;">💳 Cartão de Crédito:</p>
+                <input type="text" placeholder="Número do Cartão" style="width:100%; padding:8px; margin-bottom:6px; border:1px solid #cbd5dc; border-radius:4px; font-size:12px;">
+                <div style="display:flex; gap:6px;">
+                    <input type="text" placeholder="MM/AA" style="width:50%; padding:8px; border:1px solid #cbd5dc; border-radius:4px; font-size:12px;">
+                    <input type="text" placeholder="CVV" style="width:50%; padding:8px; border:1px solid #cbd5dc; border-radius:4px; font-size:12px;">
+                </div>
+            </div>
+
+            <button class="btn-fechar" id="btn-fechar-modal">Fechar / Concluir</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "../js/Firebase/firebase-config.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+        import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        const userDisplay = document.getElementById("user-display");
+        const btnToggle = document.getElementById("toggle-form");
+        const boxForm = document.getElementById("box-form");
+        const formAdd = document.getElementById("form-add-transacao");
+        const tabelaTransacoes = document.getElementById("tabela-transacoes");
+        
+        const modal = document.getElementById("modal-pagamento");
+        const mCliente = document.getElementById("m-cliente");
+        const mDescricao = document.getElementById("m-descricao");
+        const mValor = document.getElementById("m-valor");
+        const btnFecharModal = document.getElementById("btn-fechar-modal");
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.body.style.display = "flex";
+                currentUser = user;
+                const nome = user.displayName || user.email.split('@')[0];
+                userDisplay.textContent = `Olá, ${nome.charAt(0).toUpperCase() + nome.slice(1)}`;
+                carregarTransacoes(user.uid);
+            } else {
+                window.location.replace("../index.html");
+            }
+        });
+
+        btnToggle.addEventListener("click", () => {
+            boxForm.style.display = boxForm.style.display === "block" ? "none" : "block";
+        });
+
+        btnFecharModal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+        window.selecionarMetodo = function(metodo) {
+            document.querySelectorAll('.btn-metodo').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.detalhe-pagamento').forEach(d => d.style.display = 'none');
+
+            if (metodo === 'pix') {
+                document.getElementById('info-pix').style.display = 'block';
+                event.target.classList.add('active');
+            } else if (metodo === 'boleto') {
+                document.getElementById('info-boleto').style.display = 'block';
+                event.target.classList.add('active');
+            } else if (metodo === 'cartao') {
+                document.getElementById('info-cartao').style.display = 'block';
+                event.target.classList.add('active');
+            }
+        };
+
+        // Função global para abrir o modal de pagamento ao clicar no botão
+        window.abrirModalPagamento = function(cliente, descricao, valor) {
+            mCliente.textContent = cliente;
+            mDescricao.textContent = descricao;
+            mValor.textContent = `R$ ${Number(valor).toFixed(2)}`;
+            modal.style.display = "flex";
+        };
+
+        window.deletarTransacao = async function(idDoc) {
+            if (!confirm("Deseja realmente excluir esta transação do financeiro?")) return;
+            try {
+                await deleteDoc(doc(db, "transacoes", idDoc));
+                alert("Transação excluída com sucesso!");
+                carregarTransacoes(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao deletar transação:", error);
+                alert("Erro ao excluir transação.");
+            }
+        };
+
+        formAdd.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const descricao = document.getElementById("fin-desc").value;
+            const tipo = document.getElementById("fin-tipo").value;
+            const valor = parseFloat(document.getElementById("fin-valor").value);
+
+            try {
+                await addDoc(collection(db, "transacoes"), {
+                    cliente: "Manual",
+                    descricao,
+                    tipo,
+                    valor,
+                    ownerId: currentUser.uid,
+                    data: new Date()
+                });
+                alert("Transação registrada com sucesso!");
+                formAdd.reset();
+                boxForm.style.display = "none";
+                carregarTransacoes(currentUser.uid);
+            } catch (error) {
+                console.error("Erro ao salvar transação:", error);
+                alert("Erro ao salvar transação.");
+            }
+        });
+
+        async function carregarTransacoes(uid) {
+            try {
+                const q = query(collection(db, "transacoes"), where("ownerId", "==", uid));
+                const querySnapshot = await getDocs(q);
+                tabelaTransacoes.innerHTML = "";
+                
+                if (querySnapshot.empty) {
+                    tabelaTransacoes.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-subtitle);">Nenhuma transação registrada.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((documento) => {
+                    const t = documento.data();
+                    const id = documento.id;
+                    const corTipo = t.tipo === "Receita" ? "color: #166534; font-weight: 600;" : "color: #991b1b; font-weight: 600;";
+                    const nomeCliente = t.cliente || "Cliente Geral";
+                    const descServico = t.descricao || "Serviço prestado";
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>${nomeCliente}</strong> - ${descServico}</td>
+                        <td><span style="${corTipo}">${t.tipo}</span></td>
+                        <td>R$ ${Number(t.valor).toFixed(2)}</td>
+                        <td>
+                            <button class="btn-pagar" onclick="abrirModalPagamento('${nomeCliente}', '${descServico}', ${t.valor})">💳 Pagar</button>
+                            <button class="btn-del" onclick="deletarTransacao('${id}')">🗑️ Excluir</button>
+                        </td>
+                    `;
+
+                    tabelaTransacoes.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar transações:", error);
+            }
+        }
+
+        document.getElementById("btn-logout").addEventListener("click", async () => {
+            await signOut(auth);
+            window.location.replace("../index.html");
+        });
+    </script>
+</body>
+</html>

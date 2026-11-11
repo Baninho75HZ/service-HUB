@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - ServiceHub</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/servicos.css">
+    
+    <!-- Reutilizando o estilo de botões de filtro da tela de orçamentos -->
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--cor-card);
+            border: 1px solid var(--cor-borda);
+            color: var(--cor-texto-secundario);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .filter-btn.active {
+            background-color: var(--cor-principal);
+            color: #FFF;
+            border-color: var(--cor-principal);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="layout-app">
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">ServiceHub</div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="dashboard.html">Início</a></li>
+                <li class="nav-item"><a href="clientes.html">Clientes</a></li>
+                <li class="nav-item"><a href="orcamentos.html">Orçamentos</a></li>
+                <li class="nav-item"><a href="servicos.html" class="active">Serviços</a></li>
+                <li class="nav-item"><a href="agenda.html">Agenda</a></li>
+                <li class="nav-item"><a href="financeiro.html">Financeiro</a></li>
+                <li class="nav-item"><a href="relatorios.html">Relatórios</a></li>
+            </ul>
+            
+            <div class="sidebar-spacer"></div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="configuracoes.html">Configurações</a></li>
+                <li class="nav-item"><a href="login.html" style="color: #C94C4C;">Sair</a></li>
+            </ul>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            
+            <header class="dashboard-header">
+                <div>
+                    <h1>Ordens de Serviço (OS)</h1>
+                    <p style="color: var(--cor-texto-secundario); margin-top: 8px;">Acompanhe a execução dos orçamentos aprovados.</p>
+                </div>
+                <!-- O fluxo principal é gerar serviço pelo orçamento, mas é bom ter o botão manual -->
+                <button class="btn btn-primary">+ Novo Serviço Manual</button>
+            </header>
+
+            <!-- Barra de Filtros Rápidos -->
+            <div class="filter-bar">
+                <button class="filter-btn active">Em Andamento (2)</button>
+                <button class="filter-btn">Concluídos</button>
+                <button class="filter-btn">Todos</button>
+            </div>
+
+            <!-- LISTA DE SERVIÇOS (OS) -->
+            <div class="servicos-list">
+                
+                <!-- Serviço 1: Em Andamento -->
+                <div class="os-card">
+                    <div class="os-header">
+                        <span class="os-number">OS #0045</span>
+                        <!-- Usando o Azul Pastel para indicar informação/andamento, conforme paleta -->
+                        <span class="status-tag" style="background-color: var(--cor-destaque); color: var(--cor-texto-principal);">Em Andamento</span>
+                    </div>
+                    <div class="os-body">
+                        <div class="os-info">
+                            <h3>Troca de Fiação do Chuveiro</h3>
+                            <p>👤 Cliente: João da Silva</p>
+                            <p>📅 Agendado para: Hoje, 09:00</p>
+                        </div>
+                        <div class="os-actions">
+                            <span style="font-size: 1.25rem; font-weight: bold; color: var(--cor-texto-principal); margin-right: 16px;">R$ 150,00</span>
+                            <button class="btn btn-outline">Ver OS Completa</button>
+                            <!-- Ação positiva que vai gerar o registro financeiro -->
+                            <button class="btn btn-success">✅ Concluir Serviço</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serviço 2: Pendente / Atrasado -->
+                <div class="os-card">
+                    <div class="os-header">
+                        <span class="os-number">OS #0044</span>
+                        <!-- Amarelo Suave indicando pendência -->
+                        <span class="status-tag status-pending">Pendente</span>
+                    </div>
+                    <div class="os-body">
+                        <div class="os-info">
+                            <h3>Instalação de Disjuntor</h3>
+                            <p>👤 Cliente: Ana Lúcia</p>
+                            <p>📅 Agendado para: 22/08/2026</p>
+                        </div>
+                        <div class="os-actions">
+                            <span style="font-size: 1.25rem; font-weight: bold; color: var(--cor-texto-principal); margin-right: 16px;">R$ 80,00</span>
+                            <button class="btn btn-outline">Ver OS Completa</button>
+                            <button class="btn btn-success">✅ Concluir Serviço</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serviço 3: Concluído (Filtro mostraria apenas ao clicar na aba correspondente, mas deixei aqui como exemplo visual) -->
+                <div class="os-card" style="opacity: 0.7;">
+                    <div class="os-header">
+                        <span class="os-number">OS #0043</span>
+                        <span class="status-tag status-success">Concluído e Pago</span>
+                    </div>
+                    <div class="os-body">
+                        <div class="os-info">
+                            <h3>Pintura Fachada Residencial</h3>
+                            <p>👤 Cliente: Carlos Souza</p>
+                            <p>📅 Concluído em: 20/08/2026</p>
+                        </div>
+                        <div class="os-actions">
+                            <span style="font-size: 1.25rem; font-weight: bold; color: var(--cor-sucesso); margin-right: 16px;">R$ 1.200,00</span>
+                            <button class="btn btn-outline">Ver Recibo</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

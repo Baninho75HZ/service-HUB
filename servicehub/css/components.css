@@ -1,0 +1,32 @@
+/* Adicione isso no final do seu css/components.css */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--cor-borda, #E2E6E4);
+}
+
+/* Botão de Cancelar/Voltar (Discreto) */
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--cor-borda, #E2E6E4);
+    color: var(--cor-texto-secundario, #6B747A);
+}
+.btn-outline:hover {
+    background-color: var(--cor-fundo, #F7F8F6);
+    color: var(--cor-texto-principal, #26343D);
+}

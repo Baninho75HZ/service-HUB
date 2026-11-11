@@ -1,0 +1,111 @@
+/* =========================================
+   AGENDA STYLES
+   ========================================= */
+.agenda-day-group {
+    margin-bottom: 32px;
+}
+
+.agenda-date-header {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--cor-principal, #52677A);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid var(--cor-borda, #E2E6E4);
+    padding-bottom: 8px;
+}
+
+/* Destaque para o dia de Hoje */
+.agenda-date-header.today {
+    color: var(--cor-texto-principal, #26343D);
+}
+.agenda-date-header.today::after {
+    content: "Hoje";
+    background-color: var(--cor-destaque, #A9C4D6);
+    color: var(--cor-texto-principal, #26343D);
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
+.agenda-card {
+    display: flex;
+    align-items: stretch;
+    background-color: var(--cor-card, #FFFFFF);
+    border: 1px solid var(--cor-borda, #E2E6E4);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.agenda-card:hover {
+    box-shadow: 0 4px 8px rgba(38, 52, 61, 0.05);
+}
+
+/* Bloco lateral com o horário */
+.agenda-time {
+    background-color: var(--cor-fundo, #F7F8F6);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--cor-borda, #E2E6E4);
+    min-width: 100px;
+}
+
+.agenda-time strong {
+    font-size: 1.25rem;
+    color: var(--cor-principal, #52677A);
+}
+
+.agenda-time span {
+    font-size: 0.75rem;
+    color: var(--cor-texto-secundario, #6B747A);
+    margin-top: 4px;
+}
+
+/* Detalhes do serviço na agenda */
+.agenda-details {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.agenda-info h4 {
+    font-size: 1.125rem;
+    color: var(--cor-texto-principal, #26343D);
+    margin-bottom: 4px;
+}
+
+.agenda-info p {
+    font-size: 0.875rem;
+    color: var(--cor-texto-secundario, #6B747A);
+    margin-bottom: 8px;
+}
+
+.agenda-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* Botão específico para WhatsApp (Lembrete) */
+.btn-whatsapp {
+    background-color: #E6EDE3; /* Usando o fundo de sucesso que definimos */
+    color: var(--cor-sucesso, #657A56);
+    border: 1px solid var(--cor-sucesso, #657A56);
+    font-size: 0.875rem;
+    padding: 6px 12px;
+}
+.btn-whatsapp:hover {
+    background-color: var(--cor-sucesso, #657A56);
+    color: #FFFFFF;
+} 
